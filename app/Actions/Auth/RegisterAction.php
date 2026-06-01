@@ -7,16 +7,22 @@ use App\Services\FileService;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Services\LogService;
+use App\Exceptions\AuthException;
+use App\Services\AuditLogService;
 
 class RegisterAction
 {
     public function __construct(
         private FileService $fileService,
+        private LogService $logService,
+        private AuditLogService $auditLogService,
     ) {}
 
-    public function execute(RegisterData $data): User
+    public function execute(RegisterData $data): array
     {
-        return DB::transaction(function () use ($data) {
+        DB::beginTransaction();
+        try {
             $userData = $data->toArray();
 
             $userData['avatar_url'] = $data->avatar ? $this->fileService->upload($data->avatar, 'avatars') : null;
@@ -26,24 +32,20 @@ class RegisterAction
 
             $user->assignRole('user');
 
-            $this->logActivity($user);
+            $token = $user->createToken('auth_token')->plainTextToken;
 
-            return $user;
-        });
-    }
+            $this->auditLogService->auditLogRegister($user);
 
-    public function logActivity(User $user): void
-    {
-        activity()
-            ->useLog('auth')
-            ->event('register')
-            ->performedOn($user)
-            ->causedBy($user)
-            ->withProperties([
-                'username' => $user->username,
-                'email' => $user->email,
-                'phone' => $user->phone,
-            ])
-            ->log('New user registered. Username: ' . $user->username);
+            DB::commit();
+
+            return [
+                'user' => $user,
+                'token' => $token,
+            ];
+        } catch (\Throwable $e) {
+            $this->logService->logFailure('Register Exception', $e, ['email' => $data->email]);
+            DB::rollBack();
+            throw AuthException::unexpecedAuthException();
+        }
     }
 }

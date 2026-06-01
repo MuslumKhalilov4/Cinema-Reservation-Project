@@ -8,11 +8,14 @@ trait ApiResponse
 {
     public function success(mixed $data = null, string $message = 'Success', int $status = 200): JsonResponse
     {
-        return response()->json([
+        $response = [
             'success' => true,
             'message' => __($message),
-            'data' => $data,
-        ], $status);
+        ];
+
+        $data !== null && $response['data'] = $data;
+
+        return response()->json($response, $status);
     }
 
     public function error(string $message = 'Error', int $status = 400): JsonResponse
