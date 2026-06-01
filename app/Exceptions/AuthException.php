@@ -7,17 +7,9 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
 class AuthException extends Exception
-{
-    protected int $statusCode;
-   
+{  
     public function __construct(string $message, int $statusCode = 401){
-        parent::__construct($message);
-        $this->statusCode = $statusCode;
-    }
-
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
+        parent::__construct($message, $statusCode);
     }
 
     public static function invalidCredentials(): self
@@ -35,6 +27,6 @@ class AuthException extends Exception
         return response()->json([
             'success' => false,
             'message' => $this->getMessage(),
-        ], $this->getStatusCode());
+        ], $this->getCode());
     }
 }
