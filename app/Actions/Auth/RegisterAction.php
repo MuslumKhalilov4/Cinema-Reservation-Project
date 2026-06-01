@@ -17,22 +17,33 @@ class RegisterAction
     public function execute(RegisterData $data): User
     {
         return DB::transaction(function () use ($data) {
-            $avatarUrl = $data->avatar ? $this->fileService->upload($data->avatar, 'avatars') : null;
-            $password = Hash::make($data->password);
+            $userData = $data->toArray();
 
-            $user = User::create([
-                'first_name' => $data->first_name,
-                'last_name' => $data->last_name,
-                'username' => $data->username,
-                'email' => $data->email,
-                'phone' => $data->phone,
-                'avatar_url' => $avatarUrl,
-                'password' => $password,
-            ]);
+            $userData['avatar_url'] = $data->avatar ? $this->fileService->upload($data->avatar, 'avatars') : null;
+            $userData['password'] = Hash::make($data->password);
+
+            $user = User::create($userData);
 
             $user->assignRole('user');
 
+            $this->logActivity($user);
+
             return $user;
         });
+    }
+
+    public function logActivity(User $user): void
+    {
+        activity()
+            ->useLog('auth')
+            ->event('register')
+            ->performedOn($user)
+            ->causedBy($user)
+            ->withProperties([
+                'username' => $user->username,
+                'email' => $user->email,
+                'phone' => $user->phone,
+            ])
+            ->log('New user registered. Username: ' . $user->username);
     }
 }
