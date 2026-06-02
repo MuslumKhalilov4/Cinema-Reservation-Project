@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\LogService;
 use App\Exceptions\AuthException;
 use App\Services\AuditLogService;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterAction
 {
@@ -37,6 +38,8 @@ class RegisterAction
             $this->auditLogService->auditLogRegister($user);
 
             DB::commit();
+
+            event(new Registered($user));
 
             return [
                 'user' => $user,
