@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Constants\ResponseMessage;
+use Illuminate\Auth\Events\Verified;
 
 class VerifyEmailController extends Controller
 {
@@ -22,6 +23,8 @@ class VerifyEmailController extends Controller
             ], 400);
         }
         $user->markEmailAsVerified();
+        event(new Verified($user));
+
         return response()->json([
             'message' => ResponseMessage::EMAIL_VERIFICATION_SUCCESSFUL,
         ], 200);
