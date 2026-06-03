@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Constants\ResponseMessage;
 
 class VerifyEmailController extends Controller
 {
@@ -12,17 +13,17 @@ class VerifyEmailController extends Controller
         $user = User::find($id);
         if (!$user || !hash_equals($hash, sha1($user->getEmailForVerification()))) {
             return response()->json([
-                'message' => 'Invalid verification link',
+                'message' => ResponseMessage::EMAIL_VERIFICATION_INVALID,
             ], 404);
         }
         if ($user->hasVerifiedEmail()) {
             return response()->json([
-                'message' => 'Email already verified',
+                'message' => ResponseMessage::EMAIL_VERIFICATION_ALREADY_VERIFIED,
             ], 400);
         }
         $user->markEmailAsVerified();
         return response()->json([
-            'message' => 'Email verified successfully',
+            'message' => ResponseMessage::EMAIL_VERIFICATION_SUCCESSFUL,
         ], 200);
     }
 }

@@ -32,6 +32,7 @@ class UserFactory extends Factory
             'phone' => '+99450000' . fake()->unique()->numberBetween(1000, 9999),
             'avatar_url' => null,
             'password' => static::$password ??= Hash::make('password'),
+            'email_verified_at' => now(),
         ];
     }
 
