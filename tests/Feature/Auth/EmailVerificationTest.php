@@ -3,7 +3,6 @@
 namespace Tests\Feature\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\URL;
@@ -42,6 +41,16 @@ class EmailVerificationTest extends TestCase
         ]);
 
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
+
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'auth',
+            'event' => 'verify_email',
+            'description' => 'User verified email. Username: ' . $user->username,
+            'subject_id' => $user->id,
+            'subject_type' => User::class,
+            'causer_id' => $user->id,
+            'causer_type' => User::class,
+        ]);
     }
 
     public function test_user_cannot_verify_email_with_invalid_signature(){

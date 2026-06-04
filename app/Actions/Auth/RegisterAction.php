@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Services\LogService;
 use App\Exceptions\AuthException;
-use App\Services\AuditLogService;
 use Illuminate\Auth\Events\Registered;
 
 class RegisterAction
@@ -17,7 +16,6 @@ class RegisterAction
     public function __construct(
         private FileService $fileService,
         private LogService $logService,
-        private AuditLogService $auditLogService,
     ) {}
 
     public function execute(RegisterData $data): array
@@ -34,8 +32,6 @@ class RegisterAction
             $user->assignRole('user');
 
             $token = $user->createToken('auth_token')->plainTextToken;
-
-            $this->auditLogService->auditLogRegister($user);
 
             DB::commit();
 
