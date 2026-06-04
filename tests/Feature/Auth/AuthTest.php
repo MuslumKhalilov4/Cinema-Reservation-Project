@@ -54,11 +54,22 @@ class AuthTest extends TestCase
         ]);
 
         $storage->assertExists('avatars/' . $avatar->hashName());
+
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'auth',
+            'event' => 'register',
+            'description' => 'New user registered. Username: ' . $data['username'],
+
+            'properties->email' => $data['email'],
+            'properties->phone' => $data['phone'],
+            'properties->username' => $data['username'],
+        ]);
     }
 
     public function test_user_can_login_successfully(){
         $user = User::factory()->create([
             'email' => 'test@example.com',
+            'username' => 'test_user',
             'password' => Hash::make('password'),
         ]);
 
@@ -74,6 +85,16 @@ class AuthTest extends TestCase
             'success',
             'message',
             'data' => ['user','token'],
+        ]);
+
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'auth',
+            'event' => 'login',
+            'description' => 'User logged in. Username: ' . $user->username,
+            'subject_id' => $user->id,
+            'subject_type' => User::class,
+            'causer_id' => $user->id,
+            'causer_type' => User::class,
         ]);
     }
 
@@ -112,6 +133,16 @@ class AuthTest extends TestCase
         $this->assertDatabaseMissing('personal_access_tokens', [
             'tokenable_id' => $user->id,
             'tokenable_type' => User::class,
+        ]);
+
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'auth',
+            'event' => 'logout',
+            'description' => 'User logged out. Username: ' . $user->username,
+            'subject_id' => $user->id,
+            'subject_type' => User::class,
+            'causer_id' => $user->id,
+            'causer_type' => User::class,
         ]);
     }
 }

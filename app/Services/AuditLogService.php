@@ -35,4 +35,9 @@ class AuditLogService
     {
         $this->execute($user, 'login', 'User logged in. Username: ' . $user->username);
     }
+
+    public function auditLogVerifyEmail(User $user): void
+    {
+        $this->execute($user, 'verify_email', 'User verified email. Username: ' . $user->username);
+    }
 }
