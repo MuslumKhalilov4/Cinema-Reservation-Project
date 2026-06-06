@@ -42,7 +42,7 @@ class RegisterAction
                 'token' => $token,
             ];
         } catch (\Throwable $e) {
-            $this->logService->logFailure('Register Exception', $e, ['email' => $data->email]);
+            $this->logService->logFailure($e, ['email' => $data->email], 'Register Exception');
             DB::rollBack();
             throw AuthException::unexpecedAuthException();
         }

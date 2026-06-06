@@ -40,4 +40,12 @@ class AuditLogService
     {
         $this->execute($user, 'verify_email', 'User verified email. Username: ' . $user->username);
     }
+
+    public function auditLogUpdateProfile(User $user, array $auditLogData): void
+    {
+        $this->execute($user, 'update_profile', 'User updated profile. Username: ' . $user->username, [
+            'old_data' => $auditLogData['old_data'],
+            'changes' => $auditLogData['new_data'],
+        ]);
+    }
 }

@@ -1,12 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\Auth\ResendVerificationController;
-
+use App\Http\Controllers\Auth\{RegisterController, LoginController, LogoutController, VerifyEmailController, ResendVerificationController};
+use App\Http\Controllers\Api\User\{UserGetProfileController, UserUpdateProfileController};
 
 
 // Auth Routes
@@ -18,4 +14,12 @@ Route::post('/logout', LogoutController::class)->middleware('auth:sanctum');
 Route::prefix('email')->group(function () {
     Route::post('/verification-notification', ResendVerificationController::class)->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
     Route::get('/verify/{id}/{hash}', VerifyEmailController::class)->middleware('signed')->name('verification.verify');
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    // User Profile Routes
+    Route::get('/profile', UserGetProfileController::class);
+    Route::patch('/profile/update', UserUpdateProfileController::class);
+
 });
