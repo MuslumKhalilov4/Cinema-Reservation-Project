@@ -53,4 +53,9 @@ class AuditLogService
     {
         $this->execute($user, 'change_password', 'User changed password. Username: ' . $user->username);
     }
+
+    public function auditLogDeleteAccount(User $user): void
+    {
+        $this->execute($user, 'delete_account', 'User deleted account. Username: ' . $user->username);
+    }
 }

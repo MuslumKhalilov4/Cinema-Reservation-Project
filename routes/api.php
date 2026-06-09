@@ -19,8 +19,11 @@ Route::prefix('email')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
 
     // User Profile Routes
-    Route::get('/profile', UserGetProfileController::class);
-    Route::patch('/profile/update', UserUpdateProfileController::class);
-    Route::put('/profile/change-password', UserChangePasswordController::class);
-    Route::put('/profile/change-avatar', UserChangeAvatarController::class);
+    Route::prefix('profile')->group(function () {
+        Route::get('/', UserGetProfileController::class);
+        Route::patch('/update', UserUpdateProfileController::class);
+        Route::put('/change-password', UserChangePasswordController::class);
+        Route::put('/change-avatar', UserChangeAvatarController::class);
+        Route::delete('/delete', UserDeleteAccountController::class);
+    });
 });
