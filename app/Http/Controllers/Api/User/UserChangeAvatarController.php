@@ -23,11 +23,12 @@ class UserChangeAvatarController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if ($data->avatar && $user->avatar_url) {
+        if ($user->avatar_url) {
             $this->fileService->delete($user->avatar_url);
-            $user->avatar_url = $this->fileService->upload($data->avatar, 'avatars');
-            $user->save();
         }
+
+        $user->avatar_url = $this->fileService->upload($data->avatar, 'avatars');
+        $user->save();
 
         return $this->success(
             message: ResponseMessage::AVATAR_CHANGED_SUCCESSFULLY,

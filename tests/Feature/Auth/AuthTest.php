@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Exceptions\AuthException;
 use App\Constants\ResponseMessage;
 use Database\Seeders\RolePermissionSeeder;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Auth\Notifications\VerifyEmail;
 
 class AuthTest extends TestCase
 {
@@ -24,6 +26,7 @@ class AuthTest extends TestCase
 
     public function test_user_can_register_successfully()
     {
+        Notification::fake();
         $storage = Storage::fake('public');
 
         $avatar = UploadedFile::fake()->image('avatar.jpg');
@@ -54,6 +57,9 @@ class AuthTest extends TestCase
         ]);
 
         $storage->assertExists('avatars/' . $avatar->hashName());
+
+        $user = User::where('email', $data['email'])->first();
+        Notification::assertSentTo($user, VerifyEmail::class);
 
         $this->assertDatabaseHas('activity_log', [
             'log_name' => 'auth',
