@@ -48,4 +48,9 @@ class AuditLogService
             'changes' => $auditLogData['new_data'],
         ]);
     }
+
+    public function auditLogChangePassword(User $user): void
+    {
+        $this->execute($user, 'change_password', 'User changed password. Username: ' . $user->username);
+    }
 }

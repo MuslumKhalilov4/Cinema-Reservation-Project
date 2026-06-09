@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\{RegisterController, LoginController, LogoutController, VerifyEmailController, ResendVerificationController};
-use App\Http\Controllers\Api\User\{UserGetProfileController, UserUpdateProfileController};
+use App\Http\Controllers\Api\User\{UserGetProfileController, UserUpdateProfileController, UserChangePasswordController, UserChangeAvatarController, UserDeleteAccountController};
 
 
 // Auth Routes
@@ -21,5 +21,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // User Profile Routes
     Route::get('/profile', UserGetProfileController::class);
     Route::patch('/profile/update', UserUpdateProfileController::class);
-
+    Route::put('/profile/change-password', UserChangePasswordController::class);
+    Route::put('/profile/change-avatar', UserChangeAvatarController::class);
 });
