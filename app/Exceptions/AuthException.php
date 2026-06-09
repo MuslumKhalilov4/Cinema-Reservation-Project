@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 
 class AuthException extends Exception
 {  
-    public function __construct(string $message, int $statusCode = 401){
+    public function __construct(string $message, int $statusCode = 500){
         parent::__construct($message, $statusCode);
     }
 

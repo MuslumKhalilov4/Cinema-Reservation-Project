@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         $this->createSuperAdmin();
         $this->createCashier();
 
-        User::factory()->count(5)->create()->each(function ($user) {
+        User::factory()->count(20)->create()->each(function ($user) {
             $user->assignRole('user');
         });
     }

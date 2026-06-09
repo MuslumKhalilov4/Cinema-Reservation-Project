@@ -133,6 +133,12 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
+        'errors' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/errors.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
     ],
 
 ];

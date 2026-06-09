@@ -37,7 +37,7 @@ class LoginAction
             if ($e instanceof AuthException) {
                 throw $e;
             }
-            $this->logService->logFailure('Auth Exception', $e, ['email' => $data->email]);
+            $this->logService->logFailure($e, ['email' => $data->email], 'Login Exception');
             throw AuthException::unexpecedAuthException();
         }
     }

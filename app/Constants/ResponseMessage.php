@@ -11,4 +11,11 @@ class ResponseMessage
     public const EMAIL_VERIFICATION_SUCCESSFUL = 'Email verified successfully';
     public const EMAIL_VERIFICATION_INVALID = 'Invalid verification link';
     public const EMAIL_VERIFICATION_ALREADY_VERIFIED = 'Email already verified';
+    public const PASSWORD_CHANGED_SUCCESSFULLY = 'Password changed successfully';
+    public const AVATAR_CHANGED_SUCCESSFULLY = 'Avatar changed successfully';
+    public const ACCOUNT_DELETED_SUCCESSFULLY = 'Account deleted successfully';
+
+    // General Responses
+    public const DATA_FETCHED_SUCCESSFULLY = 'Data fetched successfully';
+    public const DATA_UPDATED_SUCCESSFULLY = 'Data updated successfully';
 }
