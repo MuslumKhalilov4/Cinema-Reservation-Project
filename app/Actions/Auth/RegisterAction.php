@@ -7,20 +7,18 @@ use App\Services\FileService;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use App\Services\LogService;
-use App\Exceptions\AuthException;
 use Illuminate\Auth\Events\Registered;
 
 class RegisterAction
 {
     public function __construct(
         private FileService $fileService,
-        private LogService $logService,
     ) {}
 
     public function execute(RegisterData $data): array
     {
         DB::beginTransaction();
+
         try {
             $userData = $data->toArray();
 
@@ -42,9 +40,9 @@ class RegisterAction
                 'token' => $token,
             ];
         } catch (\Throwable $e) {
-            $this->logService->logFailure($e, ['email' => $data->email], 'Register Exception');
             DB::rollBack();
-            throw AuthException::unexpecedAuthException();
+
+            throw $e;
         }
     }
 }

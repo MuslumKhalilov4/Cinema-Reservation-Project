@@ -2,16 +2,8 @@
 
 namespace App\Exceptions;
 
-use Exception;
-use App\Traits\ApiResponse;
-use Illuminate\Http\JsonResponse;
-
-class AuthException extends Exception
-{  
-    public function __construct(string $message, int $statusCode = 500){
-        parent::__construct($message, $statusCode);
-    }
-
+class AuthException extends AppException
+{
     public static function invalidCredentials(): self
     {
         return new self(message: 'Invalid credentials', statusCode: 401);
@@ -20,13 +12,5 @@ class AuthException extends Exception
     public static function unexpecedAuthException(): self
     {
         return new self(message: 'Unexpected authentication exception occurred. Please try again later.', statusCode: 500);
-    }
-
-    public function render(): JsonResponse
-    {
-        return response()->json([
-            'success' => false,
-            'message' => $this->getMessage(),
-        ], $this->getCode());
     }
 }
