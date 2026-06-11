@@ -32,6 +32,7 @@ class UserSeeder extends Seeder
             'phone' => '+994500000001',
             'password' => Hash::make('Admin123!'),
             'avatar_url' => null,
+            'email_verified_at' => now(),
         ]);
         $admin->assignRole('admin');
     }
@@ -46,6 +47,7 @@ class UserSeeder extends Seeder
             'phone' => '+994500000002',
             'password' => Hash::make('SuperAdmin123!'),
             'avatar_url' => null,
+            'email_verified_at' => now(),
         ]);
         $superAdmin->assignRole('super_admin');
     }
@@ -60,6 +62,7 @@ class UserSeeder extends Seeder
             'phone' => '+994500000003',
             'password' => Hash::make('Cashier123!'),
             'avatar_url' => null,
+            'email_verified_at' => now(),
         ]);
         $cashier->assignRole('cashier');
     }

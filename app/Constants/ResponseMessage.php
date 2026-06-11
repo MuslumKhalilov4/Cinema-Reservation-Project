@@ -17,5 +17,7 @@ class ResponseMessage
 
     // General Responses
     public const DATA_FETCHED_SUCCESSFULLY = 'Data fetched successfully';
+    public const DATA_CREATED_SUCCESSFULLY = 'Data created successfully';
     public const DATA_UPDATED_SUCCESSFULLY = 'Data updated successfully';
+    public const DATA_DELETED_SUCCESSFULLY = 'Data deleted successfully';
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\{RegisterController, LoginController, LogoutController, VerifyEmailController, ResendVerificationController};
+use App\Http\Controllers\Admin\GenreController;
 use App\Http\Controllers\Api\User\{UserGetProfileController, UserUpdateProfileController, UserChangePasswordController, UserChangeAvatarController, UserDeleteAccountController};
 
 
@@ -18,6 +19,8 @@ Route::prefix('email')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
 
+
+
     // User Profile Routes
     Route::prefix('profile')->group(function () {
         Route::get('/', UserGetProfileController::class);
@@ -25,5 +28,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/change-password', UserChangePasswordController::class);
         Route::put('/change-avatar', UserChangeAvatarController::class);
         Route::delete('/delete', UserDeleteAccountController::class);
+    });
+});
+
+// Admin Routes
+Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
+    Route::middleware(['role:admin|super_admin', 'verified'])->group(function () {
+        Route::apiResource('genres', GenreController::class);
     });
 });
