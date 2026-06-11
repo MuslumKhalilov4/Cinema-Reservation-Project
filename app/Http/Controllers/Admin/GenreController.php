@@ -10,7 +10,7 @@ use App\Models\Genre;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Str;
 use Spatie\LaravelData\Optional;
-use App\Http\Resources\Admin\GenreResource;
+use App\Data\Admin\Genre\GenreData;
 
 class GenreController extends Controller
 {
@@ -21,7 +21,7 @@ class GenreController extends Controller
         $genres = Genre::all();
 
         return $this->success(
-            data: GenreResource::collection($genres),
+            data: GenreData::collect($genres),
             message: ResponseMessage::DATA_FETCHED_SUCCESSFULLY,
             status: 200,
         );
@@ -35,7 +35,7 @@ class GenreController extends Controller
         ]);
 
         return $this->success(
-            data: new GenreResource($genre),
+            data: GenreData::from($genre),
             message: ResponseMessage::DATA_CREATED_SUCCESSFULLY,
             status: 201,
         );
@@ -44,7 +44,7 @@ class GenreController extends Controller
     public function show(Genre $genre)
     {
         return $this->success(
-            data: new GenreResource($genre),
+            data: GenreData::from($genre),
             message: ResponseMessage::DATA_FETCHED_SUCCESSFULLY,
             status: 200,
         );
@@ -63,7 +63,7 @@ class GenreController extends Controller
         $genre->save();
 
         return $this->success(
-            data: new GenreResource($genre),
+            data: GenreData::from($genre),
             message: ResponseMessage::DATA_UPDATED_SUCCESSFULLY,
             status: 200,
         );

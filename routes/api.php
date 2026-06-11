@@ -19,7 +19,7 @@ Route::prefix('email')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    
+
 
     // User Profile Routes
     Route::prefix('profile')->group(function () {
@@ -32,6 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->group(function () {
-    Route::apiResource('genres', GenreController::class);
+Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
+    Route::middleware(['role:admin|super_admin', 'verified'])->group(function () {
+        Route::apiResource('genres', GenreController::class);
+    });
 });
