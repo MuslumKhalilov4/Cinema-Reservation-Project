@@ -1,24 +1,18 @@
 <?php
 
-namespace App\Data\Auth;
+namespace App\Http\Requests\Auth;
 
-use Spatie\LaravelData\Data;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class RegisterData extends Data
+class RegisterRequest extends FormRequest
 {
-    public function __construct(
-        public string $first_name,
-        public string $last_name,
-        public string $username,
-        public string $email,
-        public string $phone,
-        public ?UploadedFile $avatar = null,
-        public string $password,
-    ) {}
+    public function authorize(): bool
+    {
+        return true;
+    }
 
-    public static function rules(): array
+    public function rules(): array
     {
         return [
             'first_name' => ['required', 'string', 'max:255'],

@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Data\Admin\Genre;
+namespace App\Http\Requests\Admin\Genre;
 
-use Spatie\LaravelData\Data;
+use Illuminate\Foundation\Http\FormRequest;
 
-class CreateGenreData extends Data
+class CreateGenreRequest extends FormRequest
 {
-    public function __construct(
-        public array $name,
-    ) {}
+    public function authorize(): bool
+    {
+        return true;
+    }
 
-    public static function rules(): array
+    public function rules(): array
     {
         return [
             'name' => ['required', 'array', 'max:3'],

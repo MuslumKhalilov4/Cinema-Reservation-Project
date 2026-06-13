@@ -2,7 +2,7 @@
 
 namespace App\Actions\User;
 
-use App\Data\User\UpdateProfileData;
+use App\Dto\User\UpdateProfileDto;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Services\AuditLogService;
@@ -13,7 +13,7 @@ class UserProfileUpdateAction
         private AuditLogService $auditLogService,
     ) {}
 
-    public function execute(UpdateProfileData $data, User $user)
+    public function execute(UpdateProfileDto $data, User $user)
     {
         DB::beginTransaction();
 

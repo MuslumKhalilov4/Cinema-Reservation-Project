@@ -1,23 +1,19 @@
 <?php
 
-namespace App\Data\User;
+namespace App\Http\Requests\User;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Optional;
 
-class UpdateProfileData extends Data
+class UpdateProfileRequest extends FormRequest
 {
-    public function __construct(
-        public string|Optional $first_name,
-        public string|Optional $last_name,
-        public string|Optional $username,
-        public string|Optional $email,
-        public string|Optional $phone,
-    ) {}
+    public function authorize(): bool
+    {
+        return true;
+    }
 
-    public static function rules(): array
+    public function rules(): array
     {
         $userId = Auth::id();
 
