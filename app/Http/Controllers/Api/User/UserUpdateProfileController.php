@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
-use App\Data\User\UpdateProfileData;
+use App\Dto\User\UpdateProfileDto;
+use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Resources\UserResource;
 use App\Constants\ResponseMessage;
 use Illuminate\Support\Facades\Auth;
@@ -18,11 +19,11 @@ class UserUpdateProfileController extends Controller
         private UserProfileUpdateAction $userProfileUpdateAction,
     ) {}
 
-    public function __invoke(UpdateProfileData $data)
+    public function __invoke(UpdateProfileRequest $request)
     {
         $user = Auth::user();
 
-        $user = $this->userProfileUpdateAction->execute($data, $user);
+        $user = $this->userProfileUpdateAction->execute(UpdateProfileDto::fromRequest($request), $user);
 
         return $this->success(
             data: ['user' => UserResource::make($user)],

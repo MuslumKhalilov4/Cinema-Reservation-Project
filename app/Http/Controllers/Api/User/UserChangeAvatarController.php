@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
-use App\Data\User\ChangeAvatarData;
+use App\Http\Requests\User\ChangeAvatarRequest;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -18,7 +18,7 @@ class UserChangeAvatarController extends Controller
         private FileService $fileService,
     ) {}
 
-    public function __invoke(ChangeAvatarData $data)
+    public function __invoke(ChangeAvatarRequest $request)
     {
         /** @var User $user */
         $user = Auth::user();
@@ -27,7 +27,7 @@ class UserChangeAvatarController extends Controller
             $this->fileService->delete($user->avatar_url);
         }
 
-        $user->avatar_url = $this->fileService->upload($data->avatar, 'avatars');
+        $user->avatar_url = $this->fileService->upload($request->file('avatar'), 'avatars');
         $user->save();
 
         return $this->success(

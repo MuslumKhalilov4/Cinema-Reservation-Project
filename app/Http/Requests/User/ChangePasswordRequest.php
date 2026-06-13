@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Data\User;
+namespace App\Http\Requests\User;
 
-use Spatie\LaravelData\Data;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class ChangePasswordData extends Data
+class ChangePasswordRequest extends FormRequest
 {
-    public function __construct(
-        public string $old_password,
-        public string $new_password,
-    ) {}
+    public function authorize(): bool
+    {
+        return true;
+    }
 
-    public static function rules(): array
+    public function rules(): array
     {
         return [
             'old_password' => ['required', 'string'],
