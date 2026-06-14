@@ -13,8 +13,8 @@ class RegisterDto
         public string $username,
         public string $email,
         public string $phone,
-        public ?UploadedFile $avatar = null,
         public string $password,
+        public ?UploadedFile $avatar = null,
     ) {}
 
     public static function fromRequest(RegisterRequest $request): self
