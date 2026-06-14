@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\Genre;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateGenreRequest extends FormRequest
 {
@@ -13,11 +14,11 @@ class UpdateGenreRequest extends FormRequest
 
     public function rules(): array
     {
+        $locales = config('app.supported_locales', []);
+
         return [
-            'name' => ['sometimes', 'array', 'max:3'],
-            'name.az' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'name.en' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'name.ru' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'name' => ['sometimes', 'array', Rule::array($locales)],
+            'name.*' => ['sometimes', 'nullable', 'string', 'max:255'],
         ];
     }
 }

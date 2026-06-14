@@ -10,12 +10,13 @@ use App\Http\Resources\GenreResource;
 use App\Models\Genre;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Str;
+use Illuminate\Http\JsonResponse;
 
 class GenreController extends Controller
 {
     use ApiResponse;
 
-    public function index()
+    public function index(): JsonResponse
     {
         $genres = Genre::all();
 
@@ -26,7 +27,7 @@ class GenreController extends Controller
         );
     }
 
-    public function store(CreateGenreRequest $request)
+    public function store(CreateGenreRequest $request): JsonResponse
     {
         $name = $request->validated('name');
 
@@ -42,7 +43,7 @@ class GenreController extends Controller
         );
     }
 
-    public function show(Genre $genre)
+    public function show(Genre $genre): JsonResponse
     {
         return $this->success(
             data: GenreResource::make($genre),
@@ -51,7 +52,7 @@ class GenreController extends Controller
         );
     }
 
-    public function update(UpdateGenreRequest $request, Genre $genre)
+    public function update(UpdateGenreRequest $request, Genre $genre): JsonResponse
     {
         if (array_key_exists('name', $request->validated())) {
             $name = array_filter($request->validated('name'));
@@ -72,7 +73,7 @@ class GenreController extends Controller
         );
     }
 
-    public function destroy(Genre $genre)
+    public function destroy(Genre $genre): JsonResponse
     {
         $genre->delete();
 

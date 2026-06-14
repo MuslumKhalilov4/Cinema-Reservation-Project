@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\{RegisterController, LoginController, LogoutController, VerifyEmailController, ResendVerificationController};
-use App\Http\Controllers\Admin\GenreController;
+use App\Http\Controllers\Admin\{GenreController, ActorController};
 use App\Http\Controllers\Api\User\{UserGetProfileController, UserUpdateProfileController, UserChangePasswordController, UserChangeAvatarController, UserDeleteAccountController};
 
 
@@ -37,3 +37,8 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
         Route::apiResource('genres', GenreController::class);
     });
 });
+
+Route::prefix('admin')->group(function () {
+    Route::apiResource('actors', ActorController::class);
+});
+
