@@ -2,7 +2,6 @@
 
 namespace App\Actions\Auth;
 
-use App\Data\Auth\LoginData;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Exceptions\AuthException;
@@ -14,11 +13,11 @@ class LoginAction
         private AuditLogService $auditLogService,
     ) {}
 
-    public function execute(LoginData $data): array
+    public function execute(array $data): array
     {
-        $user = User::where('email', $data->email)->first();
+        $user = User::where('email', $data['email'])->first();
 
-        if (!$user || !Hash::check($data->password, $user->password)) {
+        if (!$user || !Hash::check($data['password'], $user->password)) {
             throw AuthException::invalidCredentials();
         }
 

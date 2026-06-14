@@ -2,7 +2,7 @@
 
 namespace App\Actions\Auth;
 
-use App\Data\Auth\RegisterData;
+use App\Dto\Auth\RegisterDto;
 use App\Services\FileService;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +15,7 @@ class RegisterAction
         private FileService $fileService,
     ) {}
 
-    public function execute(RegisterData $data): array
+    public function execute(RegisterDto $data): array
     {
         DB::beginTransaction();
 
@@ -24,6 +24,8 @@ class RegisterAction
 
             $userData['avatar_url'] = $data->avatar ? $this->fileService->upload($data->avatar, 'avatars') : null;
             $userData['password'] = Hash::make($data->password);
+
+            unset($userData['avatar']);
 
             $user = User::create($userData);
 

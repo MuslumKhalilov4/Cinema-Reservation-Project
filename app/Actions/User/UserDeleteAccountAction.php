@@ -22,6 +22,7 @@ class UserDeleteAccountAction
             if ($user->avatar_url) {
                 $this->fileService->delete($user->avatar_url);
             }
+            $user->tokens()->delete();
 
             $user->delete();
             $this->auditLogService->auditLogDeleteAccount($user);

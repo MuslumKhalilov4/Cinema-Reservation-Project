@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Constants\ResponseMessage;
-use App\Data\Admin\Genre\CreateGenreData;
-use App\Data\Admin\Genre\UpdateGenreData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Genre\CreateGenreRequest;
+use App\Http\Requests\Admin\Genre\UpdateGenreRequest;
+use App\Http\Resources\GenreResource;
 use App\Models\Genre;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Str;
-use Spatie\LaravelData\Optional;
-use App\Data\Admin\Genre\GenreData;
 
 class GenreController extends Controller
 {
@@ -21,21 +20,23 @@ class GenreController extends Controller
         $genres = Genre::all();
 
         return $this->success(
-            data: GenreData::collect($genres),
+            data: GenreResource::collection($genres),
             message: ResponseMessage::DATA_FETCHED_SUCCESSFULLY,
             status: 200,
         );
     }
 
-    public function store(CreateGenreData $data)
+    public function store(CreateGenreRequest $request)
     {
+        $name = $request->validated('name');
+
         $genre = Genre::create([
-            'name' => $data->name,
-            'slug' => Str::slug($data->name['en']),
+            'name' => $name,
+            'slug' => Str::slug($name['en']),
         ]);
 
         return $this->success(
-            data: GenreData::from($genre),
+            data: GenreResource::make($genre),
             message: ResponseMessage::DATA_CREATED_SUCCESSFULLY,
             status: 201,
         );
@@ -44,26 +45,28 @@ class GenreController extends Controller
     public function show(Genre $genre)
     {
         return $this->success(
-            data: GenreData::from($genre),
+            data: GenreResource::make($genre),
             message: ResponseMessage::DATA_FETCHED_SUCCESSFULLY,
             status: 200,
         );
     }
 
-    public function update(UpdateGenreData $data, Genre $genre)
+    public function update(UpdateGenreRequest $request, Genre $genre)
     {
-        if (! $data->name instanceof Optional) {
-            $genre->name = array_merge($genre->getTranslations('name'), array_filter($data->name));
+        if (array_key_exists('name', $request->validated())) {
+            $name = array_filter($request->validated('name'));
 
-            if (isset($data->name['en'])) {
-                $genre->slug = Str::slug($data->name['en']);
+            $genre->name = array_merge($genre->getTranslations('name'), $name);
+
+            if (isset($name['en'])) {
+                $genre->slug = Str::slug($name['en']);
             }
         }
 
         $genre->save();
 
         return $this->success(
-            data: GenreData::from($genre),
+            data: GenreResource::make($genre),
             message: ResponseMessage::DATA_UPDATED_SUCCESSFULLY,
             status: 200,
         );

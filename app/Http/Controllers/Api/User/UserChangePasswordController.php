@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
-use App\Data\User\ChangePasswordData;
+use App\Http\Requests\User\ChangePasswordRequest;
 use App\Actions\User\UserChangePasswordAction;  
 use Illuminate\Support\Facades\Auth;
 use App\Constants\ResponseMessage;
@@ -16,11 +16,11 @@ class UserChangePasswordController extends Controller
         private UserChangePasswordAction $userChangePasswordAction,
     ) {}
 
-    public function __invoke(ChangePasswordData $data)
+    public function __invoke(ChangePasswordRequest $request)
     {
         $user = Auth::user();
 
-        $user = $this->userChangePasswordAction->execute($data, $user);
+        $user = $this->userChangePasswordAction->execute($request->validated(), $user);
 
         return $this->success(
             message: ResponseMessage::PASSWORD_CHANGED_SUCCESSFULLY,

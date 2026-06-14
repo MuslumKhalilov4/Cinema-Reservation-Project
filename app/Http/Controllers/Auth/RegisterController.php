@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Data\Auth\RegisterData;
+use App\Dto\Auth\RegisterDto;
 use App\Http\Controllers\Controller;
 use App\Actions\Auth\RegisterAction;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Traits\ApiResponse;
 use App\Constants\ResponseMessage;
 use App\Http\Resources\UserResource;
@@ -16,8 +17,8 @@ class RegisterController extends Controller
         private RegisterAction $registerAction,
     ) {}
 
-    public function __invoke(RegisterData $data){
-        $result = $this->registerAction->execute($data);
+    public function __invoke(RegisterRequest $request){
+        $result = $this->registerAction->execute(RegisterDto::fromRequest($request));
 
         return $this->success(
             data: ['user' => UserResource::make($result['user']), 'token' => $result['token']],

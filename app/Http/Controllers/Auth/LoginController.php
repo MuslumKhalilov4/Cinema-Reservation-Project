@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Actions\Auth\LoginAction;
-use App\Data\Auth\LoginData;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Traits\ApiResponse;
 use App\Constants\ResponseMessage;
 use App\Http\Resources\UserResource;
@@ -16,8 +16,8 @@ class LoginController extends Controller
         private LoginAction $loginAction,
     ) {}
 
-    public function __invoke(LoginData $data){
-        $result = $this->loginAction->execute($data);
+    public function __invoke(LoginRequest $request){
+        $result = $this->loginAction->execute($request->validated());
 
         return $this->success(
             data: ['user' => UserResource::make($result['user']), 'token' => $result['token']],
