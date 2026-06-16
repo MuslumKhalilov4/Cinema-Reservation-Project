@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 trait ApiResponse
 {
@@ -16,6 +17,14 @@ trait ApiResponse
         $data !== null && $response['data'] = $data;
 
         return response()->json($response, $status);
+    }
+
+    public function paginated(ResourceCollection $resource, string $message = 'Success', int $status = 200): JsonResponse
+    {
+        return $resource->additional([
+            'success' => true,
+            'message' => __($message),
+        ])->response()->setStatusCode($status);
     }
 
     public function error(string $message = 'Error', int $status = 400): JsonResponse
