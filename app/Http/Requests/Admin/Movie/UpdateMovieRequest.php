@@ -23,7 +23,7 @@ class UpdateMovieRequest extends FormRequest
             'title.*' => ['sometimes', 'string', 'max:255'],
             'description' => ['sometimes', 'array', Rule::array($locales)],
             'description.*' => ['sometimes', 'string', 'max:1000'],
-            'poster_url' => ['sometimes', 'nullable', 'file', File::types(['jpeg', 'png', 'jpg', 'svg'])->max(2048)],
+            'poster' => ['sometimes', 'nullable', 'file', File::types(['jpeg', 'png', 'jpg', 'svg'])->max(2048)],
             'trailer_url' => ['sometimes', 'url', 'max:255'],
             'duration' => ['sometimes', 'integer', 'min:60', 'max:180'],
             'release_date' => ['sometimes', 'date'],

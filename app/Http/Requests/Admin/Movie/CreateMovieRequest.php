@@ -23,7 +23,7 @@ class CreateMovieRequest extends FormRequest
             'title.*' => ['required', 'string', 'max:255'],
             'description' => ['required', 'array', Rule::array($locales)],
             'description.*' => ['required', 'string', 'max:1000'],
-            'poster_url' => ['file', File::types(['jpeg', 'png', 'jpg', 'svg'])->max(2048)],
+            'poster' => ['file', File::types(['jpeg', 'png', 'jpg', 'svg'])->max(2048)],
             'trailer_url' => ['nullable', 'url', 'max:255'],
             'duration' => ['required', 'integer', 'min:60', 'max:180'],
             'release_date' => ['required', 'date'],
@@ -31,10 +31,12 @@ class CreateMovieRequest extends FormRequest
             'language' => ['required', 'string', 'max:255'],
             'director' => ['required', 'string', 'max:255'],
             'age_limit' => ['required', 'integer', 'min:0', 'max:18'],
-            'is_featured' => ['required', 'boolean'],
-            'status' => ['required', Rule::enum(MovieStatusEnum::class)],
+            'is_featured' => ['sometimes', 'boolean'],
+            'status' => ['sometimes', Rule::enum(MovieStatusEnum::class)],
             'genre_ids' => ['required', 'array', Rule::exists('genres', 'id')],
-            'actor_ids' => ['required', 'array', Rule::exists('actors', 'id')],
+            'actors' => ['required', 'array', 'min:1'],
+            'actors.*.actor_id' => ['required', Rule::exists('actors', 'id')],
+            'actors.*.character_name' => ['required', 'string', 'max:255'],
         ];
     }
 }
