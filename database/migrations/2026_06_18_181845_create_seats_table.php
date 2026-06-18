@@ -18,6 +18,7 @@ return new class extends Migration
             $table->char('row', 1);
             $table->integer('seat_number');
             $table->boolean('is_available')->default(true);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->unique(['hall_id', 'row', 'seat_number']);
         });

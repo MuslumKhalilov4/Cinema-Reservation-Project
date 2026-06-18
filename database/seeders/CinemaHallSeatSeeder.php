@@ -15,11 +15,14 @@ class CinemaHallSeatSeeder extends Seeder
 
     public function run(): void
     {
+        Seat::flushEventListeners();
         SeatCategory::factory()->count(3)->create();
-        Cinema::factory()->count(3)->create()->each(function ($cinema) {
+        $categoryIds = SeatCategory::pluck('id');
+
+        Cinema::factory()->count(3)->create()->each(function ($cinema) use ($categoryIds) {
             Hall::factory()->count(3)->create([
                 'cinema_id' => $cinema->id,
-            ])->each(function ($hall) {
+            ])->each(function ($hall) use ($categoryIds) {
                 $rows = ['A', 'B', 'C', 'D', 'E'];
                 $seatPerRow = 10;
 
@@ -27,12 +30,17 @@ class CinemaHallSeatSeeder extends Seeder
                     for ($i = 1; $i <= $seatPerRow; $i++) {
                         Seat::create([
                             'hall_id' => $hall->id,
-                            'seat_category_id' => SeatCategory::pluck('id')->random(),
+                            'seat_category_id' => fake()->randomElement($categoryIds),
                             'row' => $row,
                             'seat_number' => $i,
                         ]);
                     }
                 }
+
+                $hall->update([
+                    'capacity' => $hall->seats()->active()->count(),
+                    'row_count' => $hall->seats()->active()->distinct()->count('row'),
+                ]);
             });
         });
     }

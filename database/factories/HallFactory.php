@@ -22,9 +22,9 @@ class HallFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'capacity' => fake()->numberBetween(10, 100),
-            'row_count' => fake()->numberBetween(10, 100),
-            'column_count' => fake()->numberBetween(10, 100)
+            'capacity' => 0,
+            'row_count' => 0,
+            'column_count' => 0,
         ];
     }
 }

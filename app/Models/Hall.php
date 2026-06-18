@@ -8,6 +8,7 @@ use Spatie\Translatable\HasTranslations;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Hall extends Model
 {
@@ -32,5 +33,10 @@ class Hall extends Model
     public function cinema(): BelongsTo
     {
         return $this->belongsTo(Cinema::class);
+    }
+
+    public function seats(): HasMany
+    {
+        return $this->hasMany(Seat::class);
     }
 }
