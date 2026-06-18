@@ -13,6 +13,7 @@
         "spatie/laravel-activitylog": "^5.0",
         "spatie/laravel-data": "^4.23",
         "spatie/laravel-permission": "^8.0",
+        "spatie/laravel-sluggable": "^4.0",
         "spatie/laravel-translatable": "^6.14"
     },
     "require-dev": {
