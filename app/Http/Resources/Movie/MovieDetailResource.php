@@ -33,7 +33,7 @@ class MovieDetailResource extends JsonResource
             'is_featured' => $this->is_featured,
             'status' => $this->status,
             'genres' => GenreResource::collection($this->genres),
-            'actors' => ActorResource::collection($this->actors),
+            'actors' => ActorResource::collection($this->cast),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

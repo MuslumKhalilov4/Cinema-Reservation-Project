@@ -25,7 +25,7 @@ class MovieService
         try {
             $movie = Movie::create($data);
             $movie->genres()->attach($genreIds);
-            $movie->cast()->attach($actors);
+            $movie->cast()->attach($this->formatCast($actors));
             DB::commit();
             return $movie->refresh();
         } catch (\Throwable $e) {
@@ -47,14 +47,22 @@ class MovieService
         $actors = Arr::pull($data, 'actors');
         $genreIds = Arr::pull($data, 'genre_ids');
 
+        $oldPoster = $movie->poster_url;
+
         DB::beginTransaction();
         try {
             $movie->update($data);
-            $movie->genres()->sync($genreIds);
-            $movie->cast()->sync($actors);
 
-            if ($newPoster) {
-                $this->fileService->delete($movie->poster_url);
+            if ($genreIds !== null) {
+                $movie->genres()->sync($genreIds);
+            }
+
+            if ($actors !== null) {
+                $movie->cast()->sync($this->formatCast($actors));
+            }
+
+            if ($newPoster && $oldPoster) {
+                $this->fileService->delete($oldPoster);
             }
 
             DB::commit();
@@ -70,9 +78,19 @@ class MovieService
 
     public function deleteMovie(Movie $movie): void
     {
+        $posterUrl = $movie->poster_url;
+
         $movie->delete();
-        if ($movie->poster_url) {
-            $this->fileService->delete($movie->poster_url);
+
+        if ($posterUrl) {
+            $this->fileService->delete($posterUrl);
         }
+    }
+
+    private function formatCast(array $actors): array
+    {
+        return collect($actors)->mapWithKeys(fn (array $actor) => [
+            $actor['actor_id'] => ['character_name' => $actor['character_name']],
+        ])->all();
     }
 }
