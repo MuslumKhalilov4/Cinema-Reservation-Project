@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\{RegisterController, LoginController, LogoutController, VerifyEmailController, ResendVerificationController};
-use App\Http\Controllers\Admin\{GenreController, ActorController, MovieController, CinemaController};
+use App\Http\Controllers\Admin\{GenreController, ActorController, MovieController, CinemaController, HallController, SeatCategoryController, SeatController};
 use App\Http\Controllers\Api\User\{UserGetProfileController, UserUpdateProfileController, UserChangePasswordController, UserChangeAvatarController, UserDeleteAccountController};
 
 
@@ -36,5 +36,8 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
         Route::apiResource('actors', ActorController::class);
         Route::apiResource('movies', MovieController::class);
         Route::apiResource('cinemas', CinemaController::class);
+        Route::apiResource('halls', HallController::class);
+        Route::apiResource('seat-categories', SeatCategoryController::class);
+        Route::apiResource('seats', SeatController::class);
     });
 });

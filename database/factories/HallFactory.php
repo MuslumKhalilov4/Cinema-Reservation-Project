@@ -24,7 +24,6 @@ class HallFactory extends Factory
             'slug' => Str::slug($name),
             'capacity' => 0,
             'row_count' => 0,
-            'column_count' => 0,
         ];
     }
 }

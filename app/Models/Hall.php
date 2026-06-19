@@ -19,7 +19,6 @@ class Hall extends Model
         'slug',
         'capacity',
         'row_count',
-        'column_count',
         'cinema_id',
     ];
 

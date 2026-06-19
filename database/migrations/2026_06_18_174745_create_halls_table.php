@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->integer('capacity');
-            $table->integer('row_count');
-            $table->integer('column_count');
+            $table->integer('capacity')->default(0);
+            $table->integer('row_count')->default(0);
             $table->foreignId('cinema_id')->constrained('cinemas')->onDelete('cascade');
             $table->timestamps();
         });
