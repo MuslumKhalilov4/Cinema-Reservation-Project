@@ -11,7 +11,7 @@ class Seat extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['hall_id', 'seat_category_id', 'row', 'seat_number', 'is_available', 'is_active'];
+    protected $fillable = ['hall_id', 'seat_category_id', 'row', 'seat_number', 'is_active'];
 
     public function hall(): BelongsTo
     {

@@ -25,7 +25,6 @@ class Cinema extends Model
     ];
 
     protected $translatable = [
-        'name',
         'about',
     ];
 
